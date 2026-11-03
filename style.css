@@ -1,0 +1,835 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #0e1013;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#dev-bar {
+    width: 100%;
+    height: 36px;
+    background: #2b1d0e;
+    border-bottom: 2px solid #ff9800;
+    padding: 0 8px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+#dev-bar button {
+    background: #ff9800;
+    color: #000;
+    border: none;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 460px;
+    height: calc(100vh - 36px);
+    background: #1e2229;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.tela {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 12px;
+    gap: 8px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.tela.ativa {
+    display: flex;
+}
+
+.conteudo-encapsulado {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+#tela-abertura {
+    padding: 0;
+}
+
+.capa-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(circle at center, #3a1818 0%, #0e1013 100%);
+}
+
+.capa-img-container {
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100% - 110px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.capa-img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.menu-abertura {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 10px 20px 16px;
+    background: rgba(14, 16, 19, 0.95);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    z-index: 5;
+}
+
+.btn-jogar {
+    width: 85%;
+    padding: 12px;
+    font-size: 20px;
+    font-weight: 900;
+    background: linear-gradient(180deg, #ffcc00, #ff6600);
+    color: #fff;
+    text-shadow: 1px 2px 3px #000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.controle-som button {
+    background: #282d37;
+    color: #ffd54f;
+    border: 1px solid #454f60;
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.topo-fixo h2 {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.menu-quartel-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.aba-quartel {
+    padding: 8px 4px;
+    background: #2b303c;
+    color: #ccc;
+    border: 1px solid #454f60;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.abas-nav {
+    grid-template-columns: 1fr 1fr;
+}
+
+.aba-btn, .aba-quartel {
+    padding: 8px 6px;
+    background: #2b303c;
+    color: #ccc;
+    border: 1px solid #454f60;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.aba-btn.ativa, .aba-quartel.ativa {
+    background: #ff9800;
+    color: #000;
+    border-color: #ffd54f;
+}
+
+.bloco-config {
+    background: #282d37;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #3a414e;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.linha-dupla {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 8px;
+}
+
+.grupo-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.btn-opcao {
+    flex: 1;
+    padding: 6px 4px;
+    background: #3a414e;
+    color: #ddd;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.btn-opcao.selecionado {
+    background: #d32f2f;
+    color: #fff;
+    border-color: #ffeb3b;
+}
+
+.preview-equipe-box {
+    background: #232730;
+    border: 2px solid #c5a880;
+    border-radius: 8px;
+    padding: 6px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 125px;
+}
+
+.retrato-sprite {
+    width: 82px;
+    height: 105px;
+    border-radius: 6px;
+    border: 2px solid #c5a880;
+    background-image: url('personagens.jpg');
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
+
+.retrato-sprite span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.82);
+    color: #ffca28;
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px 0;
+}
+
+.lista-compacta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.linha-atributo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #181b21;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px solid #2e3440;
+}
+
+.controles-attr button {
+    width: 24px;
+    height: 24px;
+    background: #ff9800;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.hud-quartel {
+    background: #111317;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-left: 4px solid #ff9800;
+}
+
+.hud-linha {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hud-xp-individual {
+    font-size: 11px;
+    color: #ffd54f;
+    background: #181c24;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.card-chamado {
+    background: #2a1b1b;
+    border: 1px solid #ef5350;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.card-chamado h4 {
+    color: #ffca28;
+    font-size: 13px;
+}
+
+.card-chamado p {
+    font-size: 11.5px;
+    color: #ddd;
+}
+
+.card-chamado-topo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.thumb-missao {
+    width: 88px;
+    height: 58px;
+    border-radius: 6px;
+    border: 1.5px solid #ff9800;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #141820;
+}
+
+.thumb-missao svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.paginacao-socorros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+.btn-pag {
+    background: #323846;
+    color: #fff;
+    border: 1px solid #525c70;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.card-carreira-membro {
+    background: #252a34;
+    border: 1px solid #c5a880;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-carreira {
+    flex: 1;
+    font-size: 11.5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.barra-xp-carreira {
+    width: 100%;
+    height: 7px;
+    background: #111;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barra-xp-preench {
+    height: 100%;
+    background: #ffca28;
+}
+
+.barra-status-ocorrencia {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.tag-funcao {
+    background: #ff9800;
+    color: #000;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.tag-etapa {
+    color: #64b5f6;
+    font-size: 11px;
+}
+
+.barra-tempo-fundo {
+    width: 100%;
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#barra-tempo-preenchimento {
+    height: 100%;
+    width: 100%;
+    background: #4caf50;
+    transition: width 0.3s linear;
+}
+
+.alerta-aviso-txt {
+    background: #4a2810;
+    border-left: 3px solid #ff9800;
+    padding: 5px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.cena-ocorrencia {
+    background: #282d37;
+    border: 1px solid #454f60;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ilustracao-cena-box {
+    width: 100%;
+    height: 130px;
+    border-radius: 6px;
+    border: 2px solid #ff9800;
+    overflow: hidden;
+    position: relative;
+    background: #1a1d24;
+}
+
+.dialogo-cena {
+    font-size: 12px;
+    line-height: 1.35;
+    color: #f0f0f0;
+    text-align: left;
+    background: #1e2229;
+    padding: 7px 9px;
+    border-radius: 6px;
+    border-left: 3px solid #ffca28;
+}
+
+.btn-curso {
+    width: 100%;
+    padding: 7px;
+    background: #1976d2;
+    color: #fff;
+    border: 1px solid #64b5f6;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 11.5px;
+    cursor: pointer;
+}
+
+.lista-escolhas {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.btn-escolha {
+    background: #323846;
+    color: #fff;
+    border: 1px solid #525c70;
+    padding: 8px 10px;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.25;
+}
+
+.btn-escolha:hover:not(:disabled) {
+    border-color: #ffca28;
+    background: #3d4454;
+}
+
+.btn-principal {
+    padding: 10px;
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.caixa-dado {
+    background: #14171d;
+    border: 2px solid #4caf50;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.grid-viaturas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.overlay-dado {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 16, 0.94);
+    z-index: 950;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+}
+
+.dado-card {
+    background: #222731;
+    border: 3px solid #ffca28;
+    border-radius: 12px;
+    padding: 18px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.d10-wrap {
+    width: 86px;
+    height: 86px;
+    border-radius: 16px;
+    background: radial-gradient(circle, #d32f2f, #7f0000);
+    border: 3px solid #ffd54f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: 900;
+    animation: girarD10 0.35s infinite alternate ease-in-out;
+}
+
+.d10-wrap.parado {
+    animation: none;
+}
+
+@keyframes girarD10 {
+    from { transform: rotate(-12deg) scale(0.92); }
+    to { transform: rotate(12deg) scale(1.06); }
+}
+
+.dado-barra {
+    width: 100%;
+    height: 8px;
+    background: #111;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#dado-barra-preench {
+    height: 100%;
+    width: 0%;
+    background: #ffca28;
+}
+
+.dado-resultado-txt {
+    font-size: 12.5px;
+    line-height: 1.35;
+}
+
+.cer-cena-box {
+    width: 100%;
+    height: 185px;
+    border: 2px solid #ffca28;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1b2230;
+}
+
+.cer-cena-box svg {
+    width: 100%;
+    height: 100%;
+}
+
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 16px;
+}
+
+.modal-conteudo {
+    background: #282d37;
+    border: 3px solid #ffca28;
+    padding: 18px;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.dica-topo {
+    font-size: 11px;
+    color: #bbb;
+    text-align: center;
+}
+
+/* ===== MAPA TÁTICO FULL-HEIGHT E OVERLAY DE MISSÃO ===== */
+/* ABA DO MAPA DE SOCORROS PREENCHENDO A TELA INTEIRA */
+#aba-quartel-socorros {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 6px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.mapa-tatico-box {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 2px solid #3a4454;
+    overflow: hidden;
+    background: #0d1b2a;
+}
+
+.mapa-tatico-viewport {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: auto;
+    scrollbar-color: #ff9800 #1b1f27;
+}
+
+.mapa-tatico-viewport::-webkit-scrollbar { height: 10px; }
+.mapa-tatico-viewport::-webkit-scrollbar-track { background: #1b1f27; }
+.mapa-tatico-viewport::-webkit-scrollbar-thumb { background: #ff9800; border-radius: 5px; }
+
+.mapa-tatico-canvas {
+    width: 900px; /* Força scroll horizontal dividindo as missões em 2 telas */
+    height: 100%;
+    min-height: 100%;
+    position: relative;
+}
+
+.mapa-tatico-canvas svg.fundo-mapa {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.rotulo-mapa {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    pointer-events: none;
+    text-shadow: 0 1px 2px #000;
+    z-index: 2;
+}
+
+/* OVERLAY (CARD FLUTUANTE) DA MISSÃO */
+.detalhe-chamado-mapa {
+    background: linear-gradient(135deg, rgba(45, 12, 40, 0.97), rgba(59, 17, 17, 0.97));
+    border: 2px solid #ffeb3b;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    background: rgba(29, 21, 24, 0.96);
+    backdrop-filter: blur(5px);
+    border: 2px solid #ef5350;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: none; /* Só aparece ao clicar no pino */
+    flex-direction: column;
+    gap: 8px;
+    z-index: 50;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+}
+
+.detalhe-chamado-mapa.ativo {
+    display: flex;
+    animation: slideUp 0.25s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.botoes-card-mapa {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.btn-cancelar {
+    flex: 0.5;
+    background: #454f60;
+    color: #fff;
+    border: 1px solid #525c70;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-cancelar:hover {
+    background: #5a6579;
+}
+.pino-ocorrencia {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    background: #2b303c;
+    border: 2px solid #ff9800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    pointer-events: auto; /* IMPORTANTE: Garante o clique no pino */
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.6);
+    z-index: 10;
+}
+
+.pino-ocorrencia:hover, .pino-ocorrencia.selecionado {
+    transform: translate(-50%, -50%) scale(1.15);
+    border-color: #ffeb3b;
+    background: #3d4454;
+}
+
+.pino-ocorrencia.catastrofe {
+    border-color: #f44336;
+    background: #4a1411;
+    animation: pulsaCatastrofe 1s infinite alternate;
+}
+
+@keyframes pulsaCatastrofe {
+    from { box-shadow: 0 0 5px #f44336; }
+    to { box-shadow: 0 0 15px #f44336; }
+}
+
+.tela-quartel.tela.ativa {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.tela-quartel > .menu-quartel-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    align-content: start;
+}
+.tela-quartel > .aba-quartel,
+.tela-quartel > .menu-quartel-nav > .aba-quartel {
+    height: auto;
+    min-height: 34px;
+}
+.tela-quartel > .conteudo-encapsulado {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    overflow-y: auto;
+}
