@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Comando 193: RPG de Bombeiro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BARRA DE TESTE COMPACTA -->
+    <div id="dev-bar">
+        <span>🛠️</span>
+        <button onclick="devIrPara('tela-abertura')">Capa</button>
+        <button onclick="devIrPara('tela-criacao')">Criação</button>
+        <button onclick="devIrPara('tela-quartel')">Quartel</button>
+        <button onclick="devAdicionarRecursos()">+400 XP / +10 🪙</button>
+        <button onclick="devForcarCatastrofe()">🌋 Catástrofe</button>
+        <button onclick="devForcarPromocao()">🎖️ Testar Promoção</button>
+        <button onclick="mostrarReserva()">🏖️ Testar Reserva</button>
+        <button onclick="devPausarTempo()" id="btn-dev-pause">⏸️ Tempo</button>
+    </div>
+
+    <!-- CONTAINER DE JOGO ESTÁTICO (SEM ROLAGEM DE PÁGINA) -->
+    <div id="game-container">
+
+        <!-- 1. TELA DE ABERTURA -->
+        <section id="tela-abertura" class="tela ativa">
+            <div class="capa-wrapper">
+                <div class="capa-img-container">
+                    <img src="capa.jpg" alt="Comando 193">
+                </div>
+                <div class="menu-abertura">
+                    <button class="btn-jogar" onclick="irParaCriacao()">JOGAR</button>
+                    <div class="controle-som">
+                        <button onclick="alternarMusica()" id="btn-musica">🎵 Trilha Instrumental: OFF</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TELA DE CRIAÇÃO -->
+        <section id="tela-criacao" class="tela">
+            <div class="topo-fixo">
+                <h2>Personalização da Guarnição</h2>
+                <div class="abas-nav">
+                    <button class="aba-btn ativa" id="btn-aba-visual" onclick="trocarAbaCriacao('visual')">Equipe & Farda</button>
+                    <button class="aba-btn" id="btn-aba-attr" onclick="trocarAbaCriacao('attr')">Atributos (<span id="pontos-restantes">6</span> pts)</button>
+                </div>
+            </div>
+
+            <!-- ABA 1: VISUAL E PAÍS -->
+            <div id="sub-criacao-visual" class="conteudo-encapsulado">
+                <div class="bloco-config">
+                    <label><strong>Dificuldade (Cronômetro):</strong></label>
+                    <div class="grupo-botoes" id="seletor-dificuldade">
+                        <button class="btn-opcao selecionado" onclick="selecionarDificuldade('Novato', 30, this)">Novato (30s)</button>
+                        <button class="btn-opcao" onclick="selecionarDificuldade('Experiente', 15, this)">Experiente (15s)</button>
+                        <button class="btn-opcao" onclick="selecionarDificuldade('Casca Grossa', 10, this)">Casca Grossa (10s)</button>
+                    </div>
+                </div>
+
+                <div class="bloco-config">
+                    <label><strong>Corpo de Bombeiros (Uniforme):</strong></label>
+                    <div class="grupo-botoes" id="seletor-corpo">
+                        <button class="btn-opcao selecionado" onclick="selecionarCorpo('Brasil', this)">🇧🇷 Brasil</button>
+                        <button class="btn-opcao" onclick="selecionarCorpo('Estados Unidos', this)">🇺🇸 EUA</button>
+                        <button class="btn-opcao" onclick="selecionarCorpo('Rússia', this)">🇷🇺 Rússia</button>
+                        <button class="btn-opcao" onclick="selecionarCorpo('Portugal', this)">🇵🇹 Portugal</button>
+                    </div>
+                </div>
+
+                <div class="bloco-config linha-dupla">
+                    <div>
+                        <label><strong>Sexo:</strong></label>
+                        <div class="grupo-botoes" id="seletor-genero">
+                            <button class="btn-opcao selecionado" onclick="selecionarGenero('Masculino', this)">Masc.</button>
+                            <button class="btn-opcao" onclick="selecionarGenero('Feminino', this)">Fem.</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label><strong>Tom de Pele:</strong></label>
+                        <div class="grupo-botoes" id="seletor-pele">
+                            <button class="btn-opcao selecionado" onclick="selecionarPele('Moreno', this)">Moreno</button>
+                            <button class="btn-opcao" onclick="selecionarPele('Claro', this)">Claro</button>
+                            <button class="btn-opcao" onclick="selecionarPele('Negro', this)">Negro</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-equipe-box" id="preview-equipe-criacao"></div>
+            </div>
+
+            <!-- ABA 2: ATRIBUTOS -->
+            <div id="sub-criacao-attr" class="conteudo-encapsulado" style="display:none;">
+                <small class="dica-topo">No D10, role um valor <strong>menor ou igual</strong> ao atributo para evitar efeitos colaterais.</small>
+                <div id="lista-atributos-criacao" class="lista-compacta"></div>
+            </div>
+
+            <button class="btn-principal rodape-btn" onclick="finalizarCriacao()">ASSUMIR COMANDO NO QUARTEL</button>
+        </section>
+
+        <!-- 3. TELA DO QUARTEL -->
+        <section id="tela-quartel" class="tela">
+           <header class="hud-quartel">
+    <div class="hud-linha">
+        <span><strong>Corpo:</strong> <span id="hud-uniforme">Brasil</span></span>
+        <span><strong>Cobertura:</strong> <span id="hud-cobertura">100%</span> | <strong>Tokens:</strong> 🪙 <span id="hud-tokens">0</span></span>
+    </div>
+    <div class="hud-linha hud-xp-individual">
+        <span>🪖 Praça: <strong id="hud-xp-praca">0</strong> XP</span>
+        <span>⭐ Oficial: <strong id="hud-xp-oficial">0</strong> XP</span>
+        <span>🦅 Cmdo: <strong id="hud-xp-superior">0</strong> XP</span>
+    </div>
+</header>
+
+<div class="menu-quartel-nav">
+    <button class="aba-quartel" id="btn-q-mapa" disabled>🗺️ Mapa</button>
+    <button class="aba-quartel ativa" id="btn-q-missoes" onclick="abrirAbaQuartel('missoes')">📋 Missões</button>
+    <button class="aba-quartel" id="btn-q-carreira" onclick="abrirAbaQuartel('carreira')">🎖️ Carreira</button>
+    <button class="aba-quartel" id="btn-q-cursos" onclick="abrirAbaQuartel('cursos')">🎓 Cursos</button>
+</div>
+
+<div id="aba-quartel-mapa" class="conteudo-encapsulado" style="display:none;"></div>
+
+<div id="aba-quartel-missoes" class="conteudo-encapsulado">
+    <div id="lista-cards-missoes" class="lista-compacta"></div>
+</div>
+
+<div id="aba-quartel-carreira" class="conteudo-encapsulado" style="display:none;">
+    <div id="painel-detalhe-carreira" class="lista-compacta"></div>
+</div>
+
+<div id="aba-quartel-cursos" class="conteudo-encapsulado" style="display:none;">
+    <small class="dica-topo">Cada curso custa <strong>10 Tokens 🪙</strong>. Quando ativado na ocorrência, desacelera o tempo (+8s) e concede +2 no D10.</small>
+    <div id="lista-cursos" class="lista-compacta"></div>
+    <div class="paginacao-socorros">
+        <button class="btn-pag" onclick="mudarPaginaCursos(-1)">◀ Anterior</button>
+        <span id="indicador-pagina-cursos">Página 1/2</span>
+        <button class="btn-pag" onclick="mudarPaginaCursos(1)">Próximos ▶</button>
+    </div>
+</div>
+        </section> <!-- ✅ FECHAMENTO CORRETO DA TELA-QUARTEL -->
+
+        <!-- 4. TELA DO OFICIAL: DESPACHO DE VIATURAS -->
+        <section id="tela-despacho" class="tela">
+            <div class="cabecalho-ocorrencia">
+                <h3 id="despacho-titulo">Despacho de Socorro</h3>
+                <p id="despacho-descricao"></p>
+            </div>
+
+            <div class="bloco-config conteudo-encapsulado">
+                <h4>📋 Escolha o Trem de Socorro:</h4>
+                <small>Viaturas erradas atrasam a resposta (-4s) e reduzem a cobertura da cidade!</small>
+                <div id="lista-viaturas" class="grid-viaturas"></div>
+            </div>
+
+            <button class="btn-principal rodape-btn" onclick="confirmarDespacho()">DESPACHAR TREM DE SOCORRO</button>
+        </section>
+
+        <!-- 5. TELA DE OCORRÊNCIA -->
+        <section id="tela-ocorrencia" class="tela">
+            <div class="barra-status-ocorrencia">
+                <span id="etapa-funcao" class="tag-funcao">SOLDADO</span>
+                <span id="etapa-progresso" class="tag-etapa">Etapa 1 de 3</span>
+                <span id="contador-segundos">20s</span>
+            </div>
+            <div class="barra-tempo-fundo">
+                <div id="barra-tempo-preenchimento"></div>
+            </div>
+
+            <div id="aviso-empenho-box" class="alerta-aviso-txt" style="display:none;"></div>
+
+            <div class="cena-ocorrencia">
+                <div id="ilustracao-cena-box" class="ilustracao-cena-box"></div>
+                <p class="dialogo-cena" id="dialogo-cena"></p>
+            </div>
+
+            <div id="area-curso-ativo" class="area-curso-ativo"></div>
+
+            <div id="lista-escolhas" class="lista-escolhas"></div>
+            <div id="caixa-dado" class="caixa-dado" style="display:none;"></div>
+        </section>
+
+        <!-- 6. TELA DE CERIMÔNIA DE PROMOÇÃO -->
+        <section id="tela-cerimonia" class="tela">
+            <h3 id="cer-titulo" class="titulo-cerimonia">🎖️ Cerimônia de Promoção</h3>
+            <div id="cer-cena" class="cer-cena-box"></div>
+            <p id="cer-dialogo" class="dialogo-cena"></p>
+            <div id="cer-botoes" class="lista-escolhas"></div>
+        </section>
+
+        <!-- 7. OVERLAY DE ROLAGEM DO DADO D10 -->
+        <div id="overlay-dado" class="overlay-dado" style="display:none;">
+            <div class="dado-card">
+                <h3 id="dado-titulo">🎲 Rolando D10...</h3>
+                <p id="dado-alvo"></p>
+                <div id="d10-wrap" class="d10-wrap">
+                    <span id="d10-numero">10</span>
+                </div>
+                <div class="dado-barra">
+                    <div id="dado-barra-preench"></div>
+                </div>
+                <p id="dado-texto" class="dado-resultado-txt"></p>
+                <button id="dado-continuar" class="btn-principal" style="display:none; width:100%;">Continuar Ocorrência ➔</button>
+            </div>
+        </div>
+
+        <!-- 8. MODAL DE SUCESSO OU FRACASSO DA MISSÃO -->
+        <div id="modal-promocao" class="modal" style="display:none;">
+            <div class="modal-conteudo">
+                <h2>📋 RELATÓRIO FINAL</h2>
+                <div id="texto-promocao"></div>
+                <button class="btn-principal" onclick="fecharModalRelatorio()">CONTINUAR</button>
+            </div>
+        </div> <!-- ✅ FECHAMENTO CORRETO DO MODAL -->
+
+    </div> <!-- FIM DO GAME-CONTAINER -->
+
+    <script src="roteiro.js"></script>
+    <script src="catastrofes.js"></script>
+    <script src="game.js"></script>
+    <script src="cenas.js"></script>
+    <script src="audio.js"></script>
+    <script src="corneta.js"></script>
+    <script src="extras.js"></script>
+</body>
+</html>
