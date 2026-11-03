@@ -1,0 +1,17 @@
+MÚSICAS DO COMANDO 193 (originais, estilo arcade/chiptune, em loop)
+
+Coloque a pasta audio/ ao lado do index.html. Abra ouvir.html para escutar todas.
+
+  tema_animal.mp3 - Captura de animal: Alegre e saltitante, 152 BPM, Dó maior, com “boing” de gato.
+  tema_predial.mp3 - Incêndio predial: Urgente, 158 BPM, Mi menor, com sirene de alarme.
+  tema_florestal.mp3 - Incêndio florestal: Épica e tensa, 140 BPM, Ré dórico, com estalos de fogo.
+  tema_busca.mp3 - Busca em florestas: Suspense lento, 90 BPM, Lá menor, com eco e coruja.
+  tema_carro_eletrico.mp3 - Carro elétrico em chamas: Elétrica e acelerada, 130 BPM, Dó menor, com zaps e “carga” subindo.
+  tema_altura.mp3 - Salvamento em altura: Ampla e flutuante, 108 BPM, Ré lídio, com vento.
+  tema_colapso.mp3 - Colapso estrutural: Pesada e sombria, 98 BPM, Dó frígio, com rumores de desabamento.
+  tema_crise.mp3 - Salvamento de suicida: Calma e acolhedora, 72 BPM, Fá maior; cresce devagar e termina em esperança.
+  tema_aquatico.mp3 - Salvamento aquático: Fluida, 100 BPM, Sol maior, com eco e bolhas.
+  tema_quimica.mp3 - Emergência química: Estranha e inquieta, 118 BPM, escala de tons inteiros, com contador Geiger e alarme.
+
+No jogo: audio.js e extras.js (nesta entrega) escolhem a música pela categoria da ocorrência (TEMA_POR_CATEGORIA em extras.js).
+Para alterar uma música: edite gerar_musicas.py e rode de novo.
